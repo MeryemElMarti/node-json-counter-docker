@@ -19,7 +19,6 @@ function readCounter() {
             return 0;
     }
 }
-
 // Écrire compteur
 function writeCounter(count) {
     try {
@@ -28,6 +27,7 @@ function writeCounter(count) {
         console.error("Erreur écriture JSON:", err);
     }
 }
+
 // Route principale
 app.get("/", async (req, res) => {
     // Attente si une écriture est en cours
