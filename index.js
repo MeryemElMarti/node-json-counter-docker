@@ -42,31 +42,30 @@ app.get("/", async (req, res) => {
         const hostname = req.hostname;
         const port = req.socket.localPort;
         const serverIP = req.socket.localAddress;
-    // Démarrage serveur
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+
+        // IP client (utile derrière proxy Azure)
+        const clientIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+        res.send(`
+            <h2>Compteur de visites</h2>
+            <p><strong>Nombre de visites :</strong> 
+            ${count}</p>
+            <hr>
+            <h3>Informations serveur</h3>
+            <p><strong>Hostname :</strong> 
+            ${hostname}</p>
+            <p><strong>Port :</strong> ${port}</p>
+            <p><strong>IP serveur :</strong> 
+            ${serverIP}</p>
+            <hr>
+            <h3>Informations client</h3>
+            <p><strong>IP client :</strong> 
+            ${clientIP}</p>
+        `);
+        } finally {
+        lock = false;
+        }
 });
-    // IP client (utile derrière proxy Azure)
-  const clientIP =
-   req.headers["x-forwarded-for"] || 
-req.socket.remoteAddress;
-  res.send(`
-   <h2>Compteur de visites</h2>
-   <p><strong>Nombre de visites :</strong> 
-${count}</p>
-   <hr>
-   <h3>Informations serveur</h3>
-   <p><strong>Hostname :</strong> 
-${hostname}</p>
-   <p><strong>Port :</strong> ${port}</p>
-   <p><strong>IP serveur :</strong> 
-${serverIP}</p>
-   <hr>
-   <h3>Informations client</h3>
-   <p><strong>IP client :</strong> 
-${clientIP}</p>
-  `);
- } finally {
-  lock = false;
- }
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
